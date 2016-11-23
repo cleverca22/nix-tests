@@ -1,0 +1,21 @@
+these derivations will be built:
+  /nix/store/zhkm4axwa3yfyckjv1can85w1srs3fs3-bare-env.drv
+building path(s) ‘/nix/store/swflx5jaygyna9svd4ccbsnbvfar2bb2-bare-env’
+TMPDIR=/tmp/nix-build-bare-env.drv-0
+builder=/nix/store/cjsvvfvx39bs4qj097j253c8mb75cpw6-bash-4.3-p46/bin/bash
+name=bare-env
+TEMP=/tmp/nix-build-bare-env.drv-0
+NIX_STORE=/nix/store
+system=x86_64-linux
+PATH=/path-not-set
+TEMPDIR=/tmp/nix-build-bare-env.drv-0
+NIX_BUILD_TOP=/tmp/nix-build-bare-env.drv-0
+PWD=/tmp/nix-build-bare-env.drv-0
+out=/nix/store/swflx5jaygyna9svd4ccbsnbvfar2bb2-bare-env
+SHLVL=1
+HOME=/homeless-shelter
+TMP=/tmp/nix-build-bare-env.drv-0
+NIX_BUILD_CORES=7
+_=/nix/store/nwq2mdczlhs3hcrdkbw131kkyaxyknn1-coreutils-8.25/bin/env
+builder for ‘/nix/store/zhkm4axwa3yfyckjv1can85w1srs3fs3-bare-env.drv’ failed to produce output path ‘/nix/store/swflx5jaygyna9svd4ccbsnbvfar2bb2-bare-env’
+error: build of ‘/nix/store/zhkm4axwa3yfyckjv1can85w1srs3fs3-bare-env.drv’ failed
