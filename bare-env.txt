@@ -1,6 +1,11 @@
 these derivations will be built:
-  /nix/store/zhkm4axwa3yfyckjv1can85w1srs3fs3-bare-env.drv
-building path(s) ‘/nix/store/swflx5jaygyna9svd4ccbsnbvfar2bb2-bare-env’
+  /nix/store/54hhl8yj96j0s8262pxgp4xy4127qcql-builder.sh.drv
+  /nix/store/fspmycgdmkqcd3p4lxr9n7cmcd771lpf-bare-env.drv
+building path(s) ‘/nix/store/b8kvgs6qc8zvz0jvbi2jrxfmcwbgdmni-builder.sh’
+building path(s) ‘/nix/store/zpffs7k4qmbdg1a8y1prwwnn7srfv9r6-bare-env’
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+nixbld       1  0.0  0.0  15336  1868 ?        Ss   16:49   0:00 bash /nix/store/b8kvgs6qc8zvz0jvbi2jrxfmcwbgdmni-builder.sh
+nixbld       2  0.0  0.0  17484  1508 ?        R    16:49   0:00   /nix/store/11vm819wkw83fn0c3q1hpgfidcgndy01-procps-3.3.11/bin/ps -eH ux
 TMPDIR=/tmp/nix-build-bare-env.drv-0
 builder=/nix/store/cjsvvfvx39bs4qj097j253c8mb75cpw6-bash-4.3-p46/bin/bash
 name=bare-env
@@ -11,11 +16,32 @@ PATH=/path-not-set
 TEMPDIR=/tmp/nix-build-bare-env.drv-0
 NIX_BUILD_TOP=/tmp/nix-build-bare-env.drv-0
 PWD=/tmp/nix-build-bare-env.drv-0
-out=/nix/store/swflx5jaygyna9svd4ccbsnbvfar2bb2-bare-env
+out=/nix/store/zpffs7k4qmbdg1a8y1prwwnn7srfv9r6-bare-env
 SHLVL=1
 HOME=/homeless-shelter
 TMP=/tmp/nix-build-bare-env.drv-0
 NIX_BUILD_CORES=7
 _=/nix/store/nwq2mdczlhs3hcrdkbw131kkyaxyknn1-coreutils-8.25/bin/env
-builder for ‘/nix/store/zhkm4axwa3yfyckjv1can85w1srs3fs3-bare-env.drv’ failed to produce output path ‘/nix/store/swflx5jaygyna9svd4ccbsnbvfar2bb2-bare-env’
-error: build of ‘/nix/store/zhkm4axwa3yfyckjv1can85w1srs3fs3-bare-env.drv’ failed
+uid=30001(nixbld) gid=30000(nixbld) groups=30000(nixbld)
+amd/nix / zfs rw,relatime,xattr,noacl 0 0
+amd/nix /bin/sh zfs rw,relatime,xattr,noacl 0 0
+devtmpfs /dev/full devtmpfs rw,nosuid,size=816668k,nr_inodes=2040244,mode=755 0 0
+devtmpfs /dev/kvm devtmpfs rw,nosuid,size=816668k,nr_inodes=2040244,mode=755 0 0
+devtmpfs /dev/null devtmpfs rw,nosuid,size=816668k,nr_inodes=2040244,mode=755 0 0
+devtmpfs /dev/random devtmpfs rw,nosuid,size=816668k,nr_inodes=2040244,mode=755 0 0
+devtmpfs /dev/tty devtmpfs rw,nosuid,size=816668k,nr_inodes=2040244,mode=755 0 0
+devtmpfs /dev/urandom devtmpfs rw,nosuid,size=816668k,nr_inodes=2040244,mode=755 0 0
+devtmpfs /dev/zero devtmpfs rw,nosuid,size=816668k,nr_inodes=2040244,mode=755 0 0
+amd/nix /nix/store/11vm819wkw83fn0c3q1hpgfidcgndy01-procps-3.3.11 zfs rw,relatime,xattr,noacl 0 0
+amd/nix /nix/store/1jwkjzrivp541v5ibgzb4wc2avla5zx9-glibc-2.24 zfs rw,relatime,xattr,noacl 0 0
+amd/nix /nix/store/22lsciby58xfsajvn3pxmlpx5pcivi00-attr-2.4.47 zfs rw,relatime,xattr,noacl 0 0
+amd/nix /nix/store/amy9x080xy87qhk0812h46r6p14d1n7h-acl-2.2.52 zfs rw,relatime,xattr,noacl 0 0
+amd/nix /nix/store/cjsvvfvx39bs4qj097j253c8mb75cpw6-bash-4.3-p46 zfs rw,relatime,xattr,noacl 0 0
+amd/nix /nix/store/hfwd34bvdj9hx5lkhb51xim4nx5brbba-ncurses-6.0 zfs rw,relatime,xattr,noacl 0 0
+amd/nix /nix/store/nwq2mdczlhs3hcrdkbw131kkyaxyknn1-coreutils-8.25 zfs rw,relatime,xattr,noacl 0 0
+amd/root /tmp/nix-build-bare-env.drv-0 zfs rw,relatime,xattr,noacl 0 0
+none /proc proc rw,relatime 0 0
+none /dev/shm tmpfs rw,relatime 0 0
+none /dev/pts devpts rw,relatime,mode=620,ptmxmode=000 0 0
+builder for ‘/nix/store/fspmycgdmkqcd3p4lxr9n7cmcd771lpf-bare-env.drv’ failed to produce output path ‘/nix/store/zpffs7k4qmbdg1a8y1prwwnn7srfv9r6-bare-env’
+error: build of ‘/nix/store/fspmycgdmkqcd3p4lxr9n7cmcd771lpf-bare-env.drv’ failed
