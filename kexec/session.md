@@ -1,3 +1,4 @@
+```
 $ nix-build '<nixpkgs/nixos>' -A config.system.build.kexec_tarball -I nixos-config=./configuration.nix -Q -j 4 
 $ scp result/tarball/nixos-system-x86_64-linux.tar.xz 192.168.2.151:.
 $ ssh 192.168.2.151
@@ -31,4 +32,4 @@ Warning: Permanently added '192.168.2.151' (ED25519) to the list of known hosts.
 Last login: Fri Dec  9 05:47:11 2016
 
 [root@kexec:~]# 
-
+```
