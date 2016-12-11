@@ -1,4 +1,4 @@
-using this nix expression, you can boot a nixos ramdisk on any server with a linux kernel that has kexec enabled
+using this nix expression and a copy of nixpkgs from nixos-unstable, you can boot a nixos ramdisk on any server with a linux kernel that has kexec enabled
 
 to use, insert your own ssh public key into the authorizedKeys for root, and then execute as seen in session.md
 
