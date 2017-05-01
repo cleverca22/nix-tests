@@ -86,6 +86,7 @@ int main(int argc, char **argv) {
     git_repository *repo = 0;
 
     git_libgit2_init();
+    // see setup.md for config info
     if (git_repository_open(&repo, "/home/clever/nixpkgs/") < 0) {
         cout << "unable to open repo";
         return -1;
