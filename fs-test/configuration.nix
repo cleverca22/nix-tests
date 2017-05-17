@@ -1,8 +1,10 @@
 { ... }:
 
-{
+let
+  pool = "tank";
+  volumes = [ "/" "/nix" "/home" ];
+in {
   boot.loader.grub.device = "/dev/sda";
-  fileSystems = [
-    { device = "pool/root"; mountPoint = "/"; fsType = "zfs"; }
-  ];
+  fileSystems = map (v: { device = "${pool}${v}"; mountPoint = v; fsType = "zfs"; }) volumes;
+  networking.hostId = "fe1f6cbf";
 }
