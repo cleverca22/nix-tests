@@ -8,4 +8,7 @@
   services.openssh.enable = true;
   networking.hostId = "@hostId@"; # required for zfs use
   boot.zfs.devNodes = "/dev"; # fixes some virtualmachine issues
+  boot.kernelParams = [
+    "panic=30" "boot.panic_on_fail" # reboot the machine upon fatal boot issues
+  ];
 }

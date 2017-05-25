@@ -9,7 +9,10 @@ with lib;
 
   boot.supportedFilesystems = [ "zfs" ];
   boot.loader.grub.enable = false;
-  boot.kernelParams = [ "console=ttyS0,115200" ];
+  boot.kernelParams = [
+    "console=ttyS0,115200"          # allows certain forms of remote access, if the hardware is setup right
+    "panic=30" "boot.panic_on_fail" # reboot the machine upon fatal boot issues
+  ];
   systemd.services.sshd.wantedBy = mkForce [ "multi-user.target" ];
   networking.hostName = "kexec";
   # example way to embed an ssh pubkey into the tar
