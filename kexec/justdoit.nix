@@ -8,7 +8,7 @@ in {
     kexec.justdoit = {
       rootDevice = mkOption {
         type = types.str;
-        default = "/dev/vda";
+        default = "/dev/sda";
         description = "the root block device that justdoit will nuke from orbit and force nixos onto";
       };
       bootSize = mkOption {
@@ -33,6 +33,8 @@ in {
       #!${pkgs.stdenv.shell}
 
       set -e
+
+      vgchange -a n
 
       dd if=/dev/zero of=${cfg.rootDevice} bs=512 count=10000
       sfdisk ${cfg.rootDevice} <<EOF
@@ -63,7 +65,7 @@ in {
       nixos-generate-config --root /mnt/
 
       hostId=$(echo $(head -c4 /dev/urandom | od -A none -t x4))
-      sed -e s/@hostId@/$hostId/ -e s/@rootDevice@/${cfg.rootDevice}/ < ${./target-config.nix} > /mnt/etc/nixos/configuration.nix
+      sed -e s/@hostId@/$hostId/ -e 's|@rootDevice@|${cfg.rootDevice}|' < ${./target-config.nix} > /mnt/etc/nixos/configuration.nix
 
       nixos-install -j 4
     '';
