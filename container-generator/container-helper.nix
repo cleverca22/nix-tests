@@ -3,7 +3,7 @@
 let
   bootScript = pkgs.writeScript "boot" ''
     #!/bin/sh
-    unshare -m ./${bootScript1}
+    unshare -m .${bootScript1}
   '';
   bootScript1 = pkgs.writeScript "boot1" ''
     #!/bin/sh
@@ -57,9 +57,10 @@ let
       { object = "${config.system.build.toplevel}/init"; symlink = "/init"; }
       { object = "${pkgs.bashInteractive}/bin/bash"; symlink = "/bash"; }
       { object = enterScript; symlink = "/enter"; }
-      { object = bootScript; symlink = "/boot"; }
     ];
-    contents = [];
+    contents = [
+      { source = bootScript; target = "/boot"; }
+    ];
   };
 in {
   system.build = {
@@ -85,7 +86,7 @@ in {
     touch /etc/NIXOS
     ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     rm /boot /enter /init
-    ln -sv ./nix/var/nix/profiles/system/boot boot
+    cp -v /nix/var/nix/profiles/system/boot /boot
     cp -v /nix/var/nix/profiles/system/enter /enter
     ln -sv ./nix/var/nix/profiles/system/init init
     mkdir -pv /etc/nixos/
