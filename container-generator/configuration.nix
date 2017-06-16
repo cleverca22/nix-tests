@@ -24,7 +24,7 @@ let
     mknod net/tun c 10 200
     popd
 
-    chroot . ${config.system.path}/bin/unshare -i -p -u -C ${bootScript2}
+    chroot . ${config.system.path}/bin/unshare -i -p -u ${bootScript2}
   '';
   bootScript2 = pkgs.writeScript "boot" ''
     #!${pkgs.stdenv.shell} -i
@@ -47,7 +47,7 @@ let
   enterScript = pkgs.writeScript "boot" ''
     #!/bin/sh
     export PATH=${config.system.path}/bin/:$PATH
-    exec nsenter -t $(cat ./pid) -m -u -i -p -C -r -w ${pkgs.bashInteractive}/bin/bash
+    exec nsenter -t $(cat ./pid) -m -u -i -p -r -w ${pkgs.bashInteractive}/bin/bash
   '';
   tarball = pkgs.callPackage <nixpkgs/nixos/lib/make-system-tarball.nix> {
     storeContents = [
