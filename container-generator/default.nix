@@ -3,20 +3,29 @@ let
   pkgs = eval.config._module.args.pkgs;
   bootScript = pkgs.writeScript "boot" ''
     #!/bin/sh
-    mkdir -p proc
+    mkdir -p proc dev
     mount --bind /proc proc/
-    chroot . ${eval.config.system.path}/bin/unshare -i -m -p -u -C --fork ${bootScript2}
+    mount --bind /dev dev/
+    chroot . ${eval.config.system.path}/bin/unshare -i -m -p -u -C ${bootScript2}
   '';
   bootScript2 = pkgs.writeScript "boot" ''
+    #!${pkgs.stdenv.shell} -i
+    export PATH=${eval.config.system.path}/bin/
+    ${bootScript3} &
+    echo the pid is $!
+    echo $! > /pid
+    fg 1
+  '';
+  bootScript3 = pkgs.writeScript "boot3" ''
     #!${pkgs.stdenv.shell}
     export PATH=${eval.config.system.path}/bin/
     mount -t proc proc /proc
-    exec /bash
+    exec bash
   '';
   enterScript = pkgs.writeScript "boot" ''
     #!${pkgs.stdenv.shell}
     export PATH=${eval.config.system.path}/bin/
-    exec nsenter --pid=/pid_ns --mount=/mount_ns ${pkgs.bashInteractive}/bin/bash
+    exec nsenter -t $(cat ./pid) -m -u -i -p -C -r -w ${pkgs.bashInteractive}/bin/bash
   '';
 in rec {
   tarball = pkgs.callPackage <nixpkgs/nixos/lib/make-system-tarball.nix> {
@@ -40,6 +49,7 @@ in rec {
       };
       desktopManager.xfce.enable = true;
     };
+    networking.hostName = "host";
     environment.systemPackages = [ (
       pkgs.writeScriptBin "doit" ''
         cd /root
