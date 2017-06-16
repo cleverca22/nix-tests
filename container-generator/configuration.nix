@@ -11,6 +11,7 @@ let
     mount --bind /proc proc/
     #mount --bind /dev dev/
     mount -t tmpfs tmpfs dev/
+    mount --bind /etc/resolv.conf etc/resolv.conf
 
     pushd dev
     mknod null c 1 3
@@ -69,6 +70,7 @@ in {
   boot.isContainer = true;
   networking.hostName = "guest";
   networking.dhcpcd.enable = false;
+  networking.firewall.enable = false;
   boot.postBootCommands = ''
     # After booting, register the contents of the Nix store on the
     # CD in the Nix database in the tmpfs.
