@@ -45,8 +45,8 @@ let
     fi
   '';
   enterScript = pkgs.writeScript "boot" ''
-    #!${pkgs.stdenv.shell}
-    export PATH=${config.system.path}/bin/
+    #!/bin/sh
+    export PATH=${config.system.path}/bin/:$PATH
     exec nsenter -t $(cat ./pid) -m -u -i -p -C -r -w ${pkgs.bashInteractive}/bin/bash
   '';
   tarball = pkgs.callPackage <nixpkgs/nixos/lib/make-system-tarball.nix> {
@@ -83,7 +83,7 @@ in {
     ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     rm /boot /enter /init
     ln -sv ./nix/var/nix/profiles/system/boot boot
-    ln -sv ./nix/var/nix/profiles/system/enter enter
+    cp -v /nix/var/nix/profiles/system/enter /enter
     ln -sv ./nix/var/nix/profiles/system/init init
     mkdir -pv /etc/nixos/
     if [ ! -f /etc/nixos/configuration.nix ]; then
