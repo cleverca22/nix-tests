@@ -3,6 +3,10 @@
 let
   bootScript = pkgs.writeScript "boot" ''
     #!/bin/sh
+    unshare -m ./${bootScript1}
+  '';
+  bootScript1 = pkgs.writeScript "boot1" ''
+    #!${pkgs.stdenv.shell}
     mkdir -p proc dev
     mount --bind /proc proc/
     #mount --bind /dev dev/
@@ -20,7 +24,7 @@ let
     mknod net/tun c 10 200
     popd
 
-    chroot . ${config.system.path}/bin/unshare -i -m -p -u -C ${bootScript2}
+    chroot . ${config.system.path}/bin/unshare -i -p -u -C ${bootScript2}
   '';
   bootScript2 = pkgs.writeScript "boot" ''
     #!${pkgs.stdenv.shell} -i
@@ -78,9 +82,9 @@ in {
     touch /etc/NIXOS
     ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     rm /boot /enter /init
-    ln -sv /nix/var/nix/profiles/system/boot boot
-    ln -sv /nix/var/nix/profiles/system/enter enter
-    ln -sv /nix/var/nix/profiles/system/init init
+    ln -sv ./nix/var/nix/profiles/system/boot boot
+    ln -sv ./nix/var/nix/profiles/system/enter enter
+    ln -sv ./nix/var/nix/profiles/system/init init
     mkdir -pv /etc/nixos/
     if [ ! -f /etc/nixos/configuration.nix ]; then
       cp ${./configuration.nix} /etc/nixos/configuration.nix
