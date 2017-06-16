@@ -6,7 +6,7 @@ let
     unshare -m ./${bootScript1}
   '';
   bootScript1 = pkgs.writeScript "boot1" ''
-    #!${pkgs.stdenv.shell}
+    #!/bin/sh
     mkdir -p proc dev
     mount --bind /proc proc/
     #mount --bind /dev dev/
