@@ -3,43 +3,45 @@
 let
   bootScript = pkgs.writeScript "boot" ''
     #!/bin/sh
-    unshare -m .${bootScript1}
+    unshare -m .${createMountsScript}
   '';
-  bootScript1 = pkgs.writeScript "boot1" ''
+  createMountsScript = pkgs.writeScript "createMounts" ''
     #!/bin/sh
     mkdir -p proc dev
     mount --bind /proc proc/
-    #mount --bind /dev dev/
     mount -t tmpfs tmpfs dev/
-    mkdir etc
+    mkdir -p etc
     touch etc/resolv.conf
     mount --bind /etc/resolv.conf etc/resolv.conf
 
-    pushd dev
+    cd dev
     mknod null c 1 3
     mknod zero c 1 5
     mknod full c 1 7
     mknod random c 1 8
     mknod urandom c 1 9
-
     mknod tty c 5 0
     mkdir net
     mknod net/tun c 10 200
-    popd
+    cd ..
 
-    chroot . ${config.system.path}/bin/unshare -i -p -u ${bootScript2}
+    export LC_ALL="C"
+    chroot . ${unshareNonMountScript}
   '';
-  bootScript2 = pkgs.writeScript "boot" ''
-    #!${pkgs.stdenv.shell} -i
-    export PATH=${config.system.path}/bin/
-    ${bootScript3} &
-    echo the pid is $!
+  unshareNonMountScript = pkgs.writeScript "unshareNonMount" ''
+    #!${pkgs.stdenv.shell} --noprofile
+    export PATH=${config.system.path}/bin
+    unshare -i -p -u ${launchInitScript}
+  '';
+  launchInitScript = pkgs.writeScript "launchInit" ''
+    #!${pkgs.stdenv.shell} --noprofile
+    set -m
+    ${initScript} &
     echo $! > /pid
     fg 1
   '';
-  bootScript3 = pkgs.writeScript "boot3" ''
+  initScript = pkgs.writeScript "initScript" ''
     #!${pkgs.stdenv.shell}
-    export PATH=${config.system.path}/bin/
     mount -t proc proc /proc
     if [ -f /nix/var/nix/profiles/system/init ]; then
       exec /nix/var/nix/profiles/system/init
@@ -47,9 +49,8 @@ let
       exec /init
     fi
   '';
-  enterScript = pkgs.writeScript "boot" ''
+  enterScript = pkgs.writeScript "enter" ''
     #!/bin/sh
-    export PATH=${config.system.path}/bin/:$PATH
     exec nsenter -t $(cat ./pid) -m -u -i -p -r -w ${pkgs.bashInteractive}/bin/bash
   '';
   tarball = pkgs.callPackage <nixpkgs/nixos/lib/make-system-tarball.nix> {
@@ -64,7 +65,7 @@ let
   };
 in {
   system.build = {
-    inherit bootScript bootScript2 bootScript3 enterScript tarball;
+    inherit bootScript createMountsScript unshareNonMountScript launchInitScript initScript enterScript tarball;
   };
   system.extraSystemBuilderCmds = ''
     cp ${bootScript} $out/boot
@@ -93,5 +94,11 @@ in {
     if [ ! -f /etc/nixos/configuration.nix ]; then
       cp ${./configuration.nix} /etc/nixos/configuration.nix
     fi
+    if [ ! -f /etc/nixos/container-helper.nix ]; then
+      cp ${./container-helper.nix} /etc/nixos/container-helper.nix
+    fi
+
+    # Reread host resolv.conf from backup
+    resolvconf -m 10000 -a host < /etc/resolv.conf.bak
   '';
 }
