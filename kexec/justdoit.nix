@@ -90,11 +90,12 @@ in {
       nixos-generate-config --root /mnt/
 
       hostId=$(echo $(head -c4 /dev/urandom | od -A none -t x4))
-      sed -e s/@hostId@/$hostId/ -e 's|@rootDevice@|${cfg.rootDevice}|' < ${./target-config.nix} > /mnt/etc/nixos/configuration.nix
+      cp ${./target-config.nix} /mnt/etc/nixos/configuration.nix
 
       cat > /mnt/etc/nixos/generated.nix <<EOF
       { ... }:
       {
+        boot.loader.grub.device = "${cfg.rootDevice}";
         networking.hostId = "$hostId"; # required for zfs use
       ${lib.optionalString cfg.luksEncrypt ''
         boot.initrd.luks.devices = [
