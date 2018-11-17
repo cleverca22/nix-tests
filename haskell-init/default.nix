@@ -1,13 +1,14 @@
 let
   pkgs = import <nixpkgs> {};
-  ghc = pkgs.haskellPackages.ghcWithPackages (p: with p; [ directory split transformers mtl linux-mount ] );
+  ghc = pkgs.pkgsCross.musl64.haskellPackages.ghcWithPackages (p: with p; [ directory split transformers mtl linux-mount ] );
   hello_world = pkgs.stdenv.mkDerivation {
     name = "hello_world";
     buildInputs = with pkgs; [ ghc ];
     unpackPhase = "true";
     installPhase = ''
       mkdir -p $out/bin
-      ghc ${./hello_world.hs} -static -split-sections -o $out/bin/init
+      x86_64-unknown-linux-musl-ghc ${./hello_world.hs} -static -split-sections -o $out/bin/init -optl=-static -L${pkgs.pkgsCross.musl64.gmp6.override { withStatic = true; }}/lib/
+      strip $out/bin/init
     '';
   };
   hello_world' = pkgs.runCommand "hello_world2" {} ''cp ${hello_world}/bin/init $out'';
