@@ -16,11 +16,14 @@
         #!${pkgs.stdenv.shell}
         export PATH=${pkgs.kexectools}/bin:${pkgs.cpio}/bin:$PATH
         set -x
+        set -e
         cd $(mktemp -d)
         pwd
         mkdir initrd
         pushd initrd
-        cat /ssh_pubkey >> authorized_keys
+        if [ -e /ssh_pubkey ]; then
+          cat /ssh_pubkey >> authorized_keys
+        fi
         find -type f | cpio -o -H newc | gzip -9 > ../extra.gz
         popd
         cat ${image}/initrd extra.gz > final.gz
