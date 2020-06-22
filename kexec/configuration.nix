@@ -5,7 +5,7 @@
 with lib;
 
 {
-  imports = [ <nixpkgs/nixos/modules/installer/netboot/netboot-minimal.nix> ./autoreboot.nix ./kexec.nix ./justdoit.nix ];
+  imports = [ <nixpkgs/nixos/modules/installer/netboot/netboot-minimal.nix> ./autoreboot.nix ./autojustdoit.nix ./kexec.nix ./justdoit.nix ];
 
   nixpkgs.localSystem.system = "x86_64-linux";
   boot.supportedFilesystems = [ "zfs" ];
