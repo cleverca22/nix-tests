@@ -4,7 +4,7 @@
   system.build = rec {
     image = pkgs.runCommand "image" { buildInputs = [ pkgs.nukeReferences ]; } ''
       mkdir $out
-      cp ${config.system.build.kernel}/bzImage $out/kernel
+      cp ${config.system.build.kernel}/${config.system.boot.loader.kernelFile} $out/kernel
       cp ${config.system.build.netbootRamdisk}/initrd $out/initrd
       echo "init=${builtins.unsafeDiscardStringContext config.system.build.toplevel}/init ${toString config.boot.kernelParams}" > $out/cmdline
       nuke-refs $out/kernel
