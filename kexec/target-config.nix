@@ -2,6 +2,7 @@
 
 {
   imports = [ ./hardware-configuration.nix ./generated.nix ];
+  nixpkgs.localSystem.system = "x86_64-linux";
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   services.openssh.enable = true;
