@@ -3,7 +3,7 @@
 {
   options = {
     kexec.autoReboot = lib.mkOption {
-      default = true;
+      default = false;
       description = "auto-reboot at the end of the hour";
       type = lib.types.bool;
     };
