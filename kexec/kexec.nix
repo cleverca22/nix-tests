@@ -2,7 +2,7 @@
 
 {
   system.build = rec {
-    image = pkgs.runCommand "image" { buildInputs = [ pkgs.nukeReferences ]; } ''
+    image = pkgs.runCommand "image" { nativeBuildInputs = [ pkgs.nukeReferences ]; } ''
       mkdir $out
       cp ${config.system.build.kernel}/${config.system.boot.loader.kernelFile} $out/kernel
       cp ${config.system.build.netbootRamdisk}/initrd $out/initrd
