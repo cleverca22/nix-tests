@@ -13,22 +13,23 @@
       executable = true;
       name = "kexec-nixos";
       text = ''
-        #!${pkgs.stdenv.shell}
-        export PATH=${pkgs.kexectools}/bin:${pkgs.cpio}/bin:$PATH
+        #!${pkgs.pkgsMusl.busybox}/bin/sh
+        export PATH=${pkgs.pkgsMusl.kexectools}/bin:${pkgs.pkgsMusl.busybox}/bin
         set -x
         set -e
+        export TMPDIR=''${TMPDIR:-/}
         cd $(mktemp -d)
         pwd
         mkdir initrd
-        pushd initrd
+        cd initrd
         if [ -e /ssh_pubkey ]; then
           cat /ssh_pubkey >> authorized_keys
         fi
         find -type f | cpio -o -H newc | gzip -9 > ../extra.gz
-        popd
-        cat ${image}/initrd extra.gz > final.gz
+        cd ..
+        cat ${builtins.unsafeDiscardStringContext image}/initrd extra.gz > final.gz
 
-        kexec -l ${image}/kernel --initrd=final.gz --append="init=${builtins.unsafeDiscardStringContext config.system.build.toplevel}/init ${toString config.boot.kernelParams}"
+        kexec -l ${builtins.unsafeDiscardStringContext image}/kernel --initrd=final.gz --append="init=${builtins.unsafeDiscardStringContext config.system.build.toplevel}/init ${toString config.boot.kernelParams}"
         sync
         echo "executing kernel, filesystems will be improperly umounted"
         kexec -e
@@ -39,10 +40,12 @@
     mkdir -p /mnt-root/root/.ssh/
     cp /authorized_keys /mnt-root/root/.ssh/
   '';
-  system.build.kexec_tarball = pkgs.callPackage <nixpkgs/nixos/lib/make-system-tarball.nix> {
+  system.build.kexec_tarball = pkgs.callPackage (pkgs.path + "/nixos/lib/make-system-tarball.nix") {
     storeContents = [
       { object = config.system.build.kexec_script; symlink = "/kexec_nixos"; }
     ];
-    contents = [];
+    contents = [
+      { source = image; target = image; }
+    ];
   };
 }
