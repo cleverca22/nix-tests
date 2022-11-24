@@ -19,7 +19,7 @@ in {
       };
       bootType = mkOption {
         type = types.enum [ "ext4" "vfat" "zfs" ];
-        default = "ext4";
+        default = if cfg.uefi then "vfat" else "ext4";
       };
       swapSize = mkOption {
         type = types.int;
