@@ -58,6 +58,8 @@ in {
     system.build.justdoit = pkgs.writeScriptBin "justdoit" ''
       #!${pkgs.stdenv.shell}
 
+      SSH_KEY=$(cat /root/.ssh/authorized_keys)
+
       set -e
 
       vgchange -a n
@@ -126,10 +128,16 @@ in {
           { name = "root"; device = "${cfg.rootDevice}${x}3"; preLVM = true; }
         ];
       ''}
+        users.users.root.openssh.authorizedKeys.keys = [
+          "$SSH_KEY"
+        ];
       }
       EOF
 
-      nixos-install
+      echo ">>> your generated nix config is:"
+      cat /mnt/etc/nixos/generated.nix
+
+      nixos-install --no-root-passwd
 
       umount /mnt/home /mnt/nix ${lib.optionalString (cfg.bootType != "zfs") "/mnt/boot"} /mnt
       zpool export ${cfg.poolName}
