@@ -19,7 +19,7 @@ in {
       };
       bootType = mkOption {
         type = types.enum [ "ext4" "vfat" "zfs" ];
-        default = "ext4";
+        default = if cfg.uefi then "vfat" else "ext4";
       };
       swapSize = mkOption {
         type = types.int;
@@ -92,7 +92,7 @@ in {
 
       ${mkBootTable.${cfg.bootType}}
       mkswap $SWAP_DEVICE -L NIXOS_SWAP
-      zpool create -o ashift=12 -o altroot=/mnt ${cfg.poolName} $ROOT_DEVICE
+      zpool create -f -o ashift=12 -o altroot=/mnt ${cfg.poolName} $ROOT_DEVICE
       zfs create -o mountpoint=legacy ${cfg.poolName}/root
       zfs create -o mountpoint=legacy ${cfg.poolName}/home
       zfs create -o mountpoint=legacy ${cfg.poolName}/nix
